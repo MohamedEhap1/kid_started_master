@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kid_started_master/app/screens/animal_screen.dart';
-import 'package:kid_started_master/app/screens/birds_screen.dart';
-
 import '../widgets/category_card.dart';
 import 'alphabet_en_screen.dart';
 import 'color_screen.dart';
 import 'numeric_en_screen.dart';
-import 'shape_screen.dart';
-import 'story_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,77 +12,46 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> categories = [
       CategoryCard(
-        title: 'Animals',
+        title: 'ABC',
         primaryColor: Colors.purpleAccent[100]!,
         secondaryColor: Colors.purple,
-        screen: AnimalScreen(
-          title: 'Animals',
-          primaryColor: Colors.purpleAccent[100]!,
+        screen: const AlphabetEnScreen(
+          title: 'ABC',
+          primaryColor: Colors.purpleAccent,
           secondaryColor: Colors.purple,
-        ),
-      ),
-      CategoryCard(
-        title: 'Birds',
-        primaryColor: Colors.purpleAccent[100]!,
-        secondaryColor: Colors.purple,
-        screen: BirdsScreen(
-          title: 'Birds',
-          primaryColor: Colors.purpleAccent[100]!,
-          secondaryColor: Colors.purple,
-        ),
-      ),
-      CategoryCard(
-        title: 'Colors',
-        primaryColor: Colors.orangeAccent[100]!,
-        secondaryColor: Colors.orange,
-        screen: ColorScreen(
-          title: 'Colors',
-          primaryColor: Colors.orangeAccent[100]!,
-          secondaryColor: Colors.orange,
         ),
       ),
       CategoryCard(
         title: '123',
         primaryColor: Colors.greenAccent[100]!,
         secondaryColor: Colors.green,
-        screen: NumericEnScreen(
+        screen: const NumericEnScreen(
           title: '123',
-          primaryColor: Colors.greenAccent[100]!,
+          primaryColor: Colors.greenAccent,
           secondaryColor: Colors.green,
         ),
       ),
       CategoryCard(
-        title: 'ABC',
-        primaryColor: Colors.purpleAccent[100]!,
-        secondaryColor: Colors.purple,
-        screen: AlphabetEnScreen(
-          title: 'ABC',
-          primaryColor: Colors.purpleAccent[100]!,
-          secondaryColor: Colors.purple,
-        ),
-      ),
-      const CategoryCard(
-        title: 'Stories',
-        primaryColor: Color(0xFF3383CD),
-        secondaryColor: Color(0xFF11249F),
-        screen: StoriesScreen(
-          title: 'Stories',
-          primaryColor: Color(0xFF3383CD),
-          secondaryColor: Color(0xFF11249F),
+        title: 'Colors',
+        primaryColor: Colors.orangeAccent[100]!,
+        secondaryColor: Colors.orange,
+        screen: const ColorScreen(
+          title: 'Colors',
+          primaryColor: Colors.orangeAccent,
+          secondaryColor: Colors.orange,
         ),
       ),
       CategoryCard(
-        title: 'Shapes',
-        primaryColor: Colors.redAccent[100]!,
-        secondaryColor: Colors.red,
-        screen: ShapesScreen(
-          title: 'Shapes',
-          primaryColor: Colors.redAccent[100]!,
-          secondaryColor: Colors.red,
+        title: 'Animals',
+        primaryColor: Colors.purpleAccent[100]!,
+        secondaryColor: Colors.purple,
+        screen: const AnimalScreen(
+          title: 'Animals',
+          primaryColor: Colors.purpleAccent,
+          secondaryColor: Colors.purple,
         ),
       ),
     ];
-
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -109,9 +74,81 @@ class HomeScreen extends StatelessWidget {
                   alignment: Alignment.topCenter,
                 ),
               ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("معلومات التطبيق"),
+                          content: SizedBox(
+                            height: 200, // ارتفاع الصندوق
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ...[
+                                    "/اعداد",
+                                    //"محمد مصطفي محمد جلال"
+                                    "أحمد ممدوح سالم الفقي",
+                                    "حمدي وليد حمدي الغزالي",
+                                    "زياد حازم فاروق علام",
+                                    "مؤمن رأفت سيد أحمد عشيبة",
+                                    "/اشراف",
+                                    "د.اسلام قنديل",
+                                  ].map((item) {
+                                    final isArabicName =
+                                        RegExp(r'[\u0600-\u06FF]').hasMatch(
+                                            item); // التحقق من النص العربي
+                                    if (item.startsWith('/')) {
+                                      return Text(
+                                        item.replaceFirst('/', ''),
+                                        style: const TextStyle(
+                                            fontSize: 18, color: Colors.red),
+                                        textAlign:
+                                            TextAlign.right, // اتجاه النص
+                                      );
+                                    }
+                                    return Text(
+                                      item,
+                                      style: TextStyle(
+                                        color: isArabicName
+                                            ? Colors.blue
+                                            : Colors.black, // لون النص
+                                      ),
+                                      textAlign: TextAlign.right, // اتجاه النص
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              child: const Text("OK"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
             SliverList(
-              delegate: SliverChildListDelegate(categories),
+              delegate: SliverChildListDelegate(
+                categories
+                    .map((category) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: category,
+                        ))
+                    .toList(),
+              ),
             ),
           ],
         ),
